@@ -1,23 +1,39 @@
 import streamlit as st
 import google.generativeai as genai
 
-# পেজ সেটআপ
 st.set_page_config(page_title="Esy chat", page_icon="🚀")
 
-# আপনার API Key এখানে বসান
-genai.configure(api_key="আপনার_API_Key_এখানে_বসান")
+# আপনার API Key এখানে দিন
+genai.configure(api_key="আপনার_API_KEY_এখানে_দিন")
 
-# AI নির্দেশনাবলী
-instructions = "তুমি Esy chat। তুমি গণিত এবং কোডিংয়ের একজন বিশেষজ্ঞ। ব্যবহারকারীর সাথে বন্ধুসুলভ আচরণ করো।"
+instructions = "তুমি Esy chat। গণিত এবং কোডিং বিশেষজ্ঞ। খুব দ্রুত এবং টাইপ করার মতো করে উত্তর দাও।"
 model = genai.GenerativeModel('gemini-1.5-flash', system_instruction=instructions)
 
 st.title("🚀 Esy chat: Math & Coding AI")
 
-# চ্যাট ইনপুট
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
+
 prompt = st.chat_input("আপনার প্রশ্ন এখানে লিখুন...")
 
 if prompt:
-    with st.spinner("Esy chat ভাবছে..."):
-        response = model.generate_content(prompt)
-        st.chat_message("user").write(prompt)
-        st.chat_message("assistant").write(response.text)
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    st.chat_message("user").write(prompt)
+    
+    with st.chat_message("assistant"):
+        response_placeholder = st.empty()
+        full_response = ""
+        
+        # 'stream=True' করার কারণে ৫ সেকেন্ডের আগেই উত্তর আসা শুরু হবে
+        result = model.generate_content(prompt, stream=True)
+        
+        for chunk in result:
+            full_response += chunk.text
+            response_placeholder.markdown(full_response + "▌")
+        
+        response_placeholder.markdown(full_response)
+        st.session_state.messages.append({"role": "assistant", "content": full_response})
