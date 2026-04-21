@@ -4,7 +4,7 @@ import google.generativeai as genai
 st.set_page_config(page_title="Esy chat", page_icon="🚀")
 
 # আপনার API Key এখানে দিন
-genai.configure(api_key="আপনার_API_KEY_এখানে_দিন")
+genai.configure(api_key="AIzaSyAwxvoQynWdAcBIFKP1hOcOP_GCTgFGqO0")
 
 instructions = "তুমি Esy chat। গণিত এবং কোডিং বিশেষজ্ঞ। খুব দ্রুত এবং টাইপ করার মতো করে উত্তর দাও।"
 model = genai.GenerativeModel('gemini-1.5-flash', system_instruction=instructions)
