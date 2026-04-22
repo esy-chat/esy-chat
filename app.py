@@ -7,7 +7,7 @@ st.set_page_config(page_title="Esy chat", page_icon="🚀")
 genai.configure(api_key="AIzaSyAwxvoQynWdAcBIFKP1hOcOP_GCTgFGqO0")
 
 instructions = "তুমি Esy chat। গণিত এবং কোডিং বিশেষজ্ঞ। খুব দ্রুত এবং টাইপ করার মতো করে উত্তর দাও।"
-model = genai.GenerativeModel('gemini-pro', system_instruction=instructions)
+model = genai.GenerativeModel('gemini-1.5-flash', system_instruction=instructions)
 
 st.title("🚀 Esy chat: Math & Coding AI")
 
